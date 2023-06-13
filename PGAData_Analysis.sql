@@ -13,31 +13,31 @@ SELECT
 PERCENTILE_CONT(0.5) WITHIN GROUP(ORDER BY sg_offthetee) AS median_sg_offthetee,
 ROUND(AVG(sg_offthetee::numeric),3) AS mean_sg_offthtee,
 ROUND(STDDEV(sg_offthetee::numeric),3) AS stddev_sg_offthetee
-FROM joined_table;
+FROM final_table;
 
 SELECT 
 PERCENTILE_CONT(0.5) WITHIN GROUP(ORDER BY sg_approach) AS median_sg_approach,
 ROUND(AVG(sg_approach::numeric),3) AS mean_sg_approach,
 ROUND(STDDEV(sg_approach::numeric),3) AS stddev_sg_approach
-FROM joined_table;
+FROM final_table;
 
 SELECT 
 PERCENTILE_CONT(0.5) WITHIN GROUP(ORDER BY sg_aroundthegreen) AS median_sg_aroundthegreen,
 ROUND(AVG(sg_aroundthegreen::numeric),3) AS mean_sg_aroundthegreen,
 ROUND(STDDEV(sg_aroundthegreen::numeric),3) AS stddev_sg_aroundthegreen
-FROM joined_table;
+FROM final_table;
 
 SELECT 
 PERCENTILE_CONT(0.5) WITHIN GROUP(ORDER BY sg_teetogreen) AS median_sg_teetogreen,
 ROUND(AVG(sg_teetogreen::numeric),3) AS mean_sg_teetogreen,
 ROUND(STDDEV(sg_teetogreen::numeric),3) AS stddev_sg_teetogreen
-FROM joined_table;
+FROM final_table;
 
 SELECT 
 PERCENTILE_CONT(0.5) WITHIN GROUP(ORDER BY sg_putting) AS median_sg_putting,
 ROUND(AVG(sg_putting::numeric),3) AS mean_sg_putting,
 ROUND(STDDEV(sg_putting::numeric),3) AS stddev_sg_putting
-FROM joined_table;
+FROM final_table;
 
 -- Can also separate by tournament
 SELECT 
@@ -45,14 +45,14 @@ tournament_name,
 PERCENTILE_CONT(0.5) WITHIN GROUP(ORDER BY sg_total) AS median_sg_total,
 ROUND(AVG(sg_total::numeric),3) AS mean_sg_total,
 ROUND(STDDEV(sg_total::numeric),3) AS stddev_sg_total
-FROM joined_table
+FROM final_table
 GROUP BY tournament_name;
 
 
 -- Tournament difficulty from easiest -> hardest
 WITH round_score AS (
     SELECT strokes / number_of_rounds AS round, tournament_name
-    FROM joined_table
+    FROM final_table
     WHERE number_of_rounds = 4
 )
 SELECT
@@ -66,7 +66,7 @@ ORDER BY average_round;
 -- Top and bottom (add DESC after ORDER BY average_round) 10 players by round average throughout the year
 WITH round_score AS (
     SELECT strokes / number_of_rounds AS round, player_name
-    FROM joined_table
+    FROM final_table
 )
 SELECT
 player_name,
@@ -78,7 +78,7 @@ LIMIT 10;
 
 -- Most 1st place finishes
 SELECT player_name, COUNT(*) as number_of_wins
-FROM joined_table
+FROM final_table
 WHERE position = 1
 GROUP BY player_name
 ORDER BY number_of_wins DESC

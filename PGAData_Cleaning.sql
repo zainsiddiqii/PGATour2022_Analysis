@@ -30,10 +30,6 @@ CREATE TABLE stats (tournament_id text REFERENCES tournaments(id),
 
 ----- Data Cleaning -----
 
--- Number of Tournaments -- 
-SELECT COUNT(DISTINCT name) AS number_of_tournaments
-FROM tournaments;
-
 -- Add new columns for the name of the course, the city, and the statethe tournament is held in to the tournaments table
 ALTER TABLE tournaments
 ADD COLUMN course_name VARCHAR(100),
@@ -87,8 +83,8 @@ DELETE FROM stats
 WHERE sg_total IS NULL OR position IS NULL OR finish IS NULL;
 
 -- Create joined table to export to CSV for analytics
-CREATE TABLE joined_table AS
-SELECT t.id AS tournament_id, t.name AS tournament_name, t.course, t.start_date, t.purse, t.season,
+CREATE TABLE final_table AS
+SELECT t.id AS tournament_id, t.name AS tournament_name, t.course, t.city, t.state, t.start_date, t.purse, t.season,
        p.id AS player_id, p.name AS player_name,
        s.hole_par, s.strokes, s.number_of_rounds, s.made_cut, s.position, s.finish,
        s.sg_putting, s.sg_aroundthegreen, s.sg_approach, s.sg_offthetee, s.sg_teetogreen, s.sg_total
